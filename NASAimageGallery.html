@@ -1,0 +1,119 @@
+<!DOCTYPE html> 
+
+<html>
+
+	<head>
+		<title>NASA IMAGE GELLERY</title>
+		<link rel="stylesheet" type="text/css" href="style.css">
+
+		<script type="text/javascript">
+			function change(elem){
+				//alert("testing2"); 
+				var img = $(elem).attr("src");
+				var title = $(elem).attr("data-description");
+				console.log(title);
+				//document.write(title);
+				var appear_image = "<img id='appear_image' src='"+img+"' />";
+				appear_image = appear_image.concat("<div id='appear_image_div' onclick='closeImage()'<p>"+title+ "</div>");
+				$('body').append(appear_image);
+			}
+			function closeImage(){
+				//alert("testing3"); 
+				$('#appear_image').remove();
+				$('#appear_image_div').remove();
+
+			}
+		</script>
+	</head>
+
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<body>
+
+		<script type="text/javascript">
+
+			var URL_flickr = "";
+			$( document ).ready(function() {	
+  				
+  				// Flicke Key and ID
+  				var key = 'a5e95177da353f58113fd60296e1d250';
+				var id = '24662369@N07';
+				
+				// Constructing flickr URL
+				URL_flickr = "https://api.flickr.com/services/rest/?method=flickr.people.getPublicPhotos&api_key="
+				URL_flickr += key;
+				URL_flickr += "&user_id="
+				URL_flickr += id;
+				URL_flickr += "&&format=json&nojsoncallback=1"
+
+				$.getJSON(URL_flickr, function(jd) {
+					var newjd = jd.photos.photo
+					var result="";
+					var imageResult="";
+					var imageURL=""; 
+				
+					var element=""; 
+					$.each(newjd, function(key, value) {
+						//example://https://c1.staticflickr.com/3/2886/33570800220_c826f1ccb6_n.jpg
+						//making a staticflickr URL
+						imageURL = "https://c1.staticflickr.com/";
+						imageURL += value.farm;
+						imageURL += "/";
+						imageURL += value.server;
+						imageURL += "/";
+						imageURL += value.id;
+						imageURL += "_";
+						imageURL += value.secret;
+						imageURL += "_n.jpg";
+						var width = "100";
+						var height = "100";
+						var id = "my_image"
+						var func = "change();";
+						//document.write(imageURL);
+						result += "<h2>" + value.title + "</h2>";
+						//imageResult += "<li><img src=" +imageURL+ " width="+width+" height="+height+ "></li>"
+						//without image id
+						//imageResult += "<img src=" +imageURL+ " width="+width+" height="+height+ "/>" //origina; imageResult
+						//with image id
+						//imageResult += "<img src=" +imageURL+ " id='imageurlid'>"
+						//with image id and onclick=change(this);
+						//imageResult += "<img src=" +imageURL+ " id='imageurlid' onclick='change(this);'>"
+						//with image id and onclick=change(this) and data-description
+
+						// go to change() function when the image is clicked
+						imageResult += "<img src=" +imageURL+ " data-description=\""+value.title +"\" id='imageurlid' onclick='change(this);'>"
+						//console.log(imageResult);
+						
+						// with class='gallaryImg'
+						//var element = "<li><a href='#' class='gallaryImg'>" + imageResult + "</a></li>";
+						//document.getElementById('msgid3').innerHTML = element;
+
+						// with id='gallaryImg' and function with change()
+						//element = "<li><a href='#' id='gallaryImg' onclick=" +func+ ">" + imageResult + "</a></li>";//baselineof element, copy down
+						// with id='gallaryImg' and function without change()
+						element = "<li><a href='#' id='gallaryImg'>" + imageResult + "</a></li>";
+						//console.log(element);
+		
+						$('#gallary ul').html(element);
+					});
+					//$('#result').html(result);
+					//$('#imageResult').html(imageResult);
+				});	
+			});
+
+		</script>
+
+	
+	<div class="title"> 
+		NASA IMAGE GALLERY
+	</div>
+
+	<div class="gallery1" id="gallary">
+		<ul>
+			
+		</ul>
+	</div>
+
+
+	</body>
+
+</html>		
